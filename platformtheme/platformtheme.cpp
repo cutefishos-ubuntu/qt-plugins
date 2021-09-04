@@ -44,6 +44,11 @@ extern void updateXdgIconSystemTheme();
 
 void onDarkModeChanged()
 {
+    if (qApp->applicationName() == "systemsettings"
+                || qApp->applicationName().contains("plasma")) {
+        return;
+    }
+
     QStyle *style = QStyleFactory::create("cutefish");
     if (style) {
         qApp->setStyle(style);
@@ -195,6 +200,14 @@ void PlatformTheme::setQtQuickControlsTheme()
 {
     //if the user has explicitly set something else, don't meddle
     if (!QQuickStyle::name().isEmpty()) {
+        return;
+    }
+
+    if (qApp->applicationName() == "systemsettings"
+            || qApp->applicationName().contains("plasma")) {
+        QQuickStyle::setStyle("Plasma");
+        QStyle *style = QStyleFactory::create("Breeze");
+        qApp->setStyle(style);
         return;
     }
 
